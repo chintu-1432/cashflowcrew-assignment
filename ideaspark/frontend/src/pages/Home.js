@@ -12,7 +12,7 @@ function Home() {
   /* FETCH IDEAS */
 
   const fetchIdeas = async () => {
-    const res = await axios.get("http://localhost:5000/api/ideas");
+    const res = await axios.get("https://cashflowcrew-assignment-eoxn.onrender.com/api/ideas");
     setIdeas(res.data);
   };
 
