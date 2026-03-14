@@ -111,7 +111,7 @@ npm start
 
 Frontend runs on
 
-https://cashflowcrew-assignment-wine.vercel.app/
+https://cashflowcrew-assignment-smoky.vercel.app/
 
 --------------------------------------------------
 
