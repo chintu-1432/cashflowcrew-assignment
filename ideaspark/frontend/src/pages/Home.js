@@ -26,7 +26,7 @@ function Home() {
 
     e.preventDefault();
 
-    await axios.post("http://localhost:5000/api/ideas", {
+    await axios.post("https://cashflowcrew-assignment-eoxn.onrender.com/api/ideas", {
       title,
       description,
       author
@@ -43,7 +43,7 @@ function Home() {
 
   const upvoteIdea = async (id) => {
 
-    await axios.patch(`http://localhost:5000/api/ideas/${id}/upvote`);
+    await axios.patch(`https://cashflowcrew-assignment-eoxn.onrender.com/api/ideas/${id}/upvote`);
 
     fetchIdeas();
   };
@@ -52,7 +52,7 @@ function Home() {
 
   const deleteIdea = async (id) => {
 
-    await axios.delete(`http://localhost:5000/api/ideas/${id}`);
+    await axios.delete(`https://cashflowcrew-assignment-eoxn.onrender.com/api/ideas/${id}`);
 
     fetchIdeas();
   };
