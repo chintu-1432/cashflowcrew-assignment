@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api"
+  baseURL: "https://cashflowcrew-assignment-eoxn.onrender.com/api"
 });
 
 export const getIdeas = () => API.get("/ideas");
