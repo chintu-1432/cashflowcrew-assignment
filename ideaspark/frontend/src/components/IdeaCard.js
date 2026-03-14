@@ -6,7 +6,7 @@ function IdeaCard({idea,refresh}){
 const deleteIdea = async()=>{
 
 await axios.delete(
-`http://localhost:5000/api/ideas/${idea._id}`
+`https://cashflowcrew-assignment-eoxn.onrender.com/api/ideas/${idea._id}`
 );
 
 refresh();
@@ -16,7 +16,7 @@ refresh();
 const upvoteIdea = async()=>{
 
 await axios.patch(
-`http://localhost:5000/api/ideas/${idea._id}/upvote`
+`https://cashflowcrew-assignment-eoxn.onrender.com/api/ideas/${idea._id}/upvote`
 );
 
 refresh();
