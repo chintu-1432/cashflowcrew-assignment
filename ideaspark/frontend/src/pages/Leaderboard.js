@@ -8,7 +8,7 @@ const [ideas,setIdeas] = useState([]);
 const fetchLeaderboard = async()=>{
 
 const res = await axios.get(
-"http://localhost:5000/api/leaderboard"
+"https://cashflowcrew-assignment-eoxn.onrender.com/api/leaderboard"
 );
 
 setIdeas(res.data);
