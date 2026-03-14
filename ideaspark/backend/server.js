@@ -16,7 +16,7 @@ app.use(express.json());
 ------------------------------ */
 
 mongoose.connect(
-"mongodb+srv://Chintu_1432:Chintu8096@ideaspark.m0vvs8j.mongodb.net/ideaspark"
+process.env.MONGO_URI
 )
 
 .then(()=>console.log("MongoDB Atlas Connected"))
