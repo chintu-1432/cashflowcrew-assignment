@@ -10,7 +10,7 @@ function CreateIdea({ refreshIdeas }) {
   const handleSubmit = async(e)=>{
     e.preventDefault();
 
-    await axios.post("http://localhost:5000/api/ideas",{
+    await axios.post("https://cashflowcrew-assignment-eoxn.onrender.com/api/ideas",{
       title,
       description,
       author
