@@ -4,6 +4,10 @@ const mongoose = require("mongoose");
 
 const app = express();
 
+/* -----------------------------
+   Middleware
+------------------------------ */
+
 app.use(cors());
 app.use(express.json());
 
@@ -11,7 +15,9 @@ app.use(express.json());
    MongoDB Connection
 ------------------------------ */
 
-mongoose.connect("mongodb+srv://Chintu_1432:Chintu8096@ideaspark.m0vvs8j.mongodb.net/ideaspark")
+mongoose.connect(
+"mongodb+srv://Chintu_1432:Chintu8096@ideaspark.m0vvs8j.mongodb.net/ideaspark"
+)
 
 .then(()=>console.log("MongoDB Atlas Connected"))
 
@@ -70,7 +76,19 @@ app.post("/api/signup",async(req,res)=>{
 
 try{
 
-const user = new User(req.body);
+const {name,email,password} = req.body;
+
+const existingUser = await User.findOne({email});
+
+if(existingUser){
+return res.status(400).json({message:"User already exists"});
+}
+
+const user = new User({
+name,
+email,
+password
+});
 
 await user.save();
 
@@ -78,7 +96,8 @@ res.json(user);
 
 }catch(err){
 
-res.status(500).json(err);
+console.log(err);
+res.status(500).json({message:"Signup failed"});
 
 }
 
@@ -91,20 +110,31 @@ res.status(500).json(err);
 
 app.post("/api/login",async(req,res)=>{
 
-const user = await User.findOne({
+try{
 
-email:req.body.email,
-password:req.body.password
+const {email,password} = req.body;
 
-});
+const user = await User.findOne({email});
 
 if(!user){
-
-return res.status(404).json("Invalid credentials");
-
+return res.status(404).json({message:"User not found"});
 }
 
-res.json(user);
+if(user.password !== password){
+return res.status(401).json({message:"Invalid password"});
+}
+
+res.json({
+message:"Login successful",
+user
+});
+
+}catch(err){
+
+console.log(err);
+res.status(500).json({message:"Login failed"});
+
+}
 
 });
 
@@ -115,17 +145,26 @@ res.json(user);
 
 app.post("/api/ideas",async(req,res)=>{
 
+try{
+
+const {title,description,author} = req.body;
+
 const idea = new Idea({
-
-title:req.body.title,
-description:req.body.description,
-author:req.body.author
-
+title,
+description,
+author
 });
 
 await idea.save();
 
 res.json(idea);
+
+}catch(err){
+
+console.log(err);
+res.status(500).json({message:"Idea creation failed"});
+
+}
 
 });
 
@@ -136,9 +175,18 @@ res.json(idea);
 
 app.get("/api/ideas",async(req,res)=>{
 
+try{
+
 const ideas = await Idea.find().sort({createdAt:-1});
 
 res.json(ideas);
+
+}catch(err){
+
+console.log(err);
+res.status(500).json({message:"Failed to fetch ideas"});
+
+}
 
 });
 
@@ -148,6 +196,8 @@ res.json(ideas);
 ------------------------------ */
 
 app.put("/api/ideas/:id",async(req,res)=>{
+
+try{
 
 const updatedIdea = await Idea.findByIdAndUpdate(
 
@@ -162,6 +212,13 @@ description:req.body.description
 
 res.json(updatedIdea);
 
+}catch(err){
+
+console.log(err);
+res.status(500).json({message:"Idea update failed"});
+
+}
+
 });
 
 
@@ -171,9 +228,18 @@ res.json(updatedIdea);
 
 app.delete("/api/ideas/:id",async(req,res)=>{
 
+try{
+
 await Idea.findByIdAndDelete(req.params.id);
 
 res.json({message:"Idea deleted"});
+
+}catch(err){
+
+console.log(err);
+res.status(500).json({message:"Delete failed"});
+
+}
 
 });
 
@@ -184,6 +250,8 @@ res.json({message:"Idea deleted"});
 
 app.patch("/api/ideas/:id/upvote",async(req,res)=>{
 
+try{
+
 const idea = await Idea.findById(req.params.id);
 
 idea.upvotes += 1;
@@ -191,6 +259,13 @@ idea.upvotes += 1;
 await idea.save();
 
 res.json(idea);
+
+}catch(err){
+
+console.log(err);
+res.status(500).json({message:"Upvote failed"});
+
+}
 
 });
 
@@ -201,11 +276,20 @@ res.json(idea);
 
 app.get("/api/leaderboard",async(req,res)=>{
 
+try{
+
 const ideas = await Idea.find()
 .sort({upvotes:-1})
 .limit(5);
 
 res.json(ideas);
+
+}catch(err){
+
+console.log(err);
+res.status(500).json({message:"Leaderboard failed"});
+
+}
 
 });
 
@@ -214,8 +298,10 @@ res.json(ideas);
    Server
 ------------------------------ */
 
-app.listen(5000,()=>{
+const PORT = process.env.PORT || 5000;
 
-console.log("Server running on port 5000");
+app.listen(PORT,()=>{
+
+console.log("Server running on port",PORT);
 
 });
